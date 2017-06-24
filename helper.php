@@ -15,8 +15,8 @@
    require './facebook-sdk-v5/Facebook.php';
     // Create our Application instance (replace this with your appId and secret).
     $facebook = new Facebook(array(
-    'appId'  => '950411125007007',
-    'secret' => '4b77caeee8c8c42b33ff2e6f742e9de4',
+    'appId'  => 'YOUR APP ID',
+    'secret' => 'YOUR SECRET',
     'cookie' => true
    ));
    
@@ -24,7 +24,7 @@
 
    $ret_obj = $GLOBALS['facebook']->api('/'.$_SESSION['page_id'].'/feed', 'post',
             array('access_token' => $_SESSION['page_token'],
-            'from' => '950411125007007',
+            'from' => 'YOUR APP ID',
             'to' => $_SESSION['page_id'],
             'caption' => '- a techstore Post',
             'link' => $url,
