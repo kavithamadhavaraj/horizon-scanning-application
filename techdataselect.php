@@ -1,7 +1,8 @@
 <?php
+	require_once('config.php');
 	session_start();
 	 // connect to mongodb
-   $m = new MongoClient();
+   $m = new MongoDB\Client("mongodb://".MONGO_SERVER.":".MONGO_PORT);
    $db = $m->techstore;
 
    $collection = $db->techdata;
@@ -32,14 +33,14 @@
 	}
 
 	*/
-	$cursor2 = $collection2->find(array('_id' =>new MongoID($_SESSION['currentQuestionnaire'])));
+	$cursor2 = $collection2->find(array('_id' => (new MongoDB\BSON\ObjectID(($_SESSION['currentQuestionnaire'])))));
 	$tech_id = array();
 	
   	foreach($cursor2 as $documents){ 
 			$tech_id = explode(",", $documents["setData"]);
 	foreach($tech_id as $data){
 		//echo $data."\n";
-		$cursor = $collection->find(array('_id' => new MongoID($data)));
+		$cursor = $collection->find(array('_id' => (new MongoDB\BSON\ObjectID($data))));
 		foreach ($cursor as $document) {
 			$obj_id_array[] = $document["_id"];
 			$title_array[] = $document["title"];

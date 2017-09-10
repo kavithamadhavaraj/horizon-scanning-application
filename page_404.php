@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -21,8 +21,10 @@
     <link href="css/custom.css" rel="stylesheet">
     <link href="css/icheck/flat/green.css" rel="stylesheet">
 
+    <script src="js/config.js"></script>
 
-    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>     
+    <script src="js/notify.min.js"></script>
 
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -58,7 +60,6 @@
             <!-- /page content -->
 
         </div>
-        <!-- footer content -->
     </div>
 
     <div id="custom_notifications" class="custom-notifications dsp_none">

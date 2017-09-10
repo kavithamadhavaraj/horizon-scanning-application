@@ -1,5 +1,11 @@
 <?php 
-session_start();
+require_once('config.php');
+  session_start(); 
+  if(!isset($_SESSION['role'])){
+    echo "<script>
+      window.location.href='".SERVER_URL."logout.php';
+      </script>";
+}
 $_SESSION['currentPage'] = "report";
 require('helper.php');
 ?>
@@ -12,7 +18,7 @@ require('helper.php');
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -47,8 +53,10 @@ require('helper.php');
 
     </style>
     
+    <script src="js/config.js"></script>
 
-    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>     
+    <script src="js/notify.min.js"></script>
      <!-- Datatables -->
 
         <script src="js/datatables.min.js"/>
@@ -264,7 +272,7 @@ require('helper.php');
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span> </a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -433,10 +441,8 @@ require('helper.php');
 
                                         <tbody>
                                         <?php
-
                                         $cursor = $GLOBALS['collection']->find(array('impression' =>  array('$exists' => true)));
-                                        $cursor->sort(array("date" => -1));
-                                        $check =2 ;
+                                        $check = 2 ;
                                         foreach ($cursor as $document) {
                                         //    if(array_key_exists("impression",$document)){
                                                 if($check%2 == 0){
@@ -450,7 +456,7 @@ require('helper.php');
                                                 echo '<td class=" ">'."".'</td>';
                                                 }
                                                 if(array_key_exists("keywords",$document)){
-                                                echo '<td class=" ">'.implode(",",$document["keywords"]).'</td>';
+                                                echo '<td class=" ">'.implode(",",$document["keywords"]->jsonSerialize()).'</td>';
                                                 }
                                                 else{
                                                 echo '<td class=" ">'."".'</td>';
@@ -486,7 +492,7 @@ require('helper.php');
                                                 echo '<td class=" ">'."".'</td>';
                                                 }
                                                 if(array_key_exists("keywords",$document)){
-                                                echo '<td class=" ">'.implode(",",$document["keywords"]).'</td>';
+                                                echo '<td class=" ">'.implode(",",$document["keywords"]->jsonSerialize()).'</td>';
                                                 }
                                                 else{
                                                 echo '<td class=" ">'."".'</td>';
@@ -525,18 +531,6 @@ require('helper.php');
                         </div>
                     </div>
                 </div>
-
-                <!-- footer content -->
-                <footer>
-                    <div class="">
-                        <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                        <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-                        </p>
-                    </div>
-                    <div class="clearfix"></div>
-                </footer>
-                <!-- /footer content -->
-
             </div>
             <!-- /page content -->
         </div>

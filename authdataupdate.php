@@ -1,7 +1,19 @@
 <?php
+require_once('config.php');
+session_start();
+if(isset($_SESSION['role'])){
+    if($_SESSION['role'] == "admin" ) {
+    }
+    elseif (($_SESSION['role'] == "moderator") ||($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")) {
+        echo "<script>window.location.href='".SERVER_URL."logout.php';</script>"; 
+    }
+}
+else{
+    echo "<script>window.location.href='".SERVER_URL."logout.php';</script>"; 
+}
 if(isset($_POST['action']) && !empty($_POST['action'])) {
    $data = json_decode(stripslashes($_POST['action']));
-   $m = new MongoClient();
+   $m = new MongoDB\Client("mongodb://".MONGO_SERVER.":".MONGO_PORT);
    $db = $m->techstore;
    $collection = $db->auth_user;
    $cursor = $collection->find();
@@ -30,7 +42,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 				"role" => $role
 			);
 		// now insert the document
-			$collection->insert($document);
+			$collection->insertOne($document);
 			echo json_encode(array("answer"=>"success"));
 			//echo "Document inserted successfully"; 
 	}

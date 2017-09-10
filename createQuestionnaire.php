@@ -1,26 +1,23 @@
 <?php 
 session_start();
-$_SESSION['currentPage'] = "createQuestionnaire";
-require('helper.php');
+require_once('config.php');
 if(isset($_SESSION['role'])){
-                        if($_SESSION['role'] == "admin"){
-                        }
-                        elseif ($_SESSION['role'] == "moderator") {
-                        }
-                        elseif (($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")) {
-
-                        echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>"; 
-                        }
-                    }
-                    else if((isset($_SESSION['valid'])) && ($_SESSION['valid'] == false))
-                    {  
-                        echo "<script>
-                        alert('Password Invalid, Try again!');
-                        </script>"; 
-                    }
-                   
+    if (($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")) {
+        echo "<script>
+        window.location.href='".SERVER_URL."logout.php';
+        </script>"; 
+    }
+}
+else if((isset($_SESSION['valid'])) && ($_SESSION['valid'] == false))
+{  
+    echo "<script>
+    alert('Password Invalid, Try again!');
+    </script>"; 
+}else{
+    echo "<script>window.location.href='".SERVER_URL."logout.php';</script>"; 
+}
+$_SESSION['currentPage'] = "createQuestionnaire";
+require('helper.php');                  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +28,7 @@ if(isset($_SESSION['role'])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -53,12 +50,12 @@ if(isset($_SESSION['role'])){
 
    
      <!-- Datatables -->
-       <script src="js/jquery.min.js"></script>
+       <script src="js/jquery.min.js"></script>     <script src="js/notify.min.js"></script>
      <!-- Datatables -->
        <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"/>
         <script src="js/datatables/tools/js/dataTables.tableTools.js"></script>
         <script src="js/bootstrap.min.js"></script>
-     
+        <script src="js/config.js"></script>
 
     
         <!-- bootstrap progress js -->
@@ -125,7 +122,7 @@ if(isset($_SESSION['role'])){
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span></a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -223,7 +220,7 @@ if(isset($_SESSION['role'])){
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel" style="height:600px;">
+                            <div class="x_panel" style="height:50px;">
                                 <div class="x_title">
                                     <h2>Generate Insights and decide the technologies for survey</h2>
                                     <div class="clearfix"></div>
@@ -237,8 +234,10 @@ if(isset($_SESSION['role'])){
 
                                             <?php
                                                 if(EMPTY($_SESSION['page_id'])) 
-                                                {   $reload = "https://www.facebook.com/dialog/oauth?client_id=950411125007007&redirect_uri=http://localhost/techstore/gentelella-master/production/post.php?fbTrue=true&scope=read_insights,manage_pages";
-                                                    echo "<a class= 'btn btn-warning' href='".$reload."'>Login with Facebook</a>";
+                                                {   $helper = $GLOBALS['facebook']->getRedirectLoginHelper();
+                                                    $permissions = ["publish_pages","publish_actions","manage_pages"]; // optional
+                                                    $loginUrl = $helper->getLoginUrl(SERVER_URL."post.php", $permissions);
+                                                    echo "<a class= 'btn btn-warning' href='".$loginUrl."'>Login with Facebook</a>";
                                                 }
                                                 if(isset($_SESSION['page_id'])) {
                                                     echo '<button type="submit" name= "insights" class="btn btn-success">Get Insights</button>';
@@ -269,10 +268,12 @@ if(isset($_SESSION['role'])){
                                         <?php
 
                                         $cursor = $GLOBALS['collection']->find(array("isPosted" =>  array('$ne' => "discarded")));
-                                        $cursor->limit(30);
                                         $check = 2;
                                         foreach ($cursor as $document) {
                                             if(array_key_exists("impression",$document)){
+                                                $document["keywords"] = $document["keywords"]->jsonSerialize();
+                                                $document["summary"] = $document["summary"] ?? '';
+                                                
                                                 if($check%2 == 0){
                                                 echo '<tr class="even pointer">
                                                 <td class=" ">'.$document["title"].'</td>
@@ -283,7 +284,7 @@ if(isset($_SESSION['role'])){
                                                 <td class=" hidden">'.$document["_id"].'</td>
                                                 </tr>';
                                                  }
-                                                 else{
+                                                else{
                                                   echo '<tr class="odd pointer">
                                                 <td class=" ">'.$document["title"].'</td>
                                                 <td class=" "><a href="'.$document["url"].'">View</a>
@@ -314,18 +315,6 @@ if(isset($_SESSION['role'])){
                         </div>
                     </div>
                 </div>
-
-                <!-- footer content -->
-                <footer>
-                    <div class="">
-                        <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                        <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-                        </p>
-                    </div>
-                    <div class="clearfix"></div>
-                </footer>
-                <!-- /footer content -->
-
             </div>
             <!-- /page content -->
         </div>

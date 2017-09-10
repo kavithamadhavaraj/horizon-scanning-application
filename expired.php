@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php 
-                    session_start();
-                    if((isset($_SESSION['role'])) && (isset($_SESSION['currentQuestionnaire']))) {
-                    
-                    }
-                    else{
-                         echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/page_404.php';
-                        </script>";    
-                    }
-                    $_SESSION['currentPage'] = "expired";
+session_start();
+require_once('config.php');
+if((isset($_SESSION['role'])) && (isset($_SESSION['currentQuestionnaire']))) {
+}
+else{
+    echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>";    
+}
+$_SESSION['currentPage'] = "expired";
 ?>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -19,7 +19,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -35,8 +35,8 @@
     <!-- editor -->
     <link href="css/editor/external/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="css/editor/index.css" rel="stylesheet">
-
-    <script src="js/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/jquery.min.js"></script>     <script src="js/notify.min.js"></script>
 
 </head>
 
@@ -51,7 +51,7 @@
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span> </a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -139,17 +139,6 @@
                         </div>
                     </div>
                 </div>
-
-            <!-- footer content -->
-            <footer>
-                <div class="">
-                    <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                     <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-                    </p>
-                </div>
-                <div class="clearfix"></div>
-            </footer>
-            <!-- /footer content -->
             </div>
             <!-- /page content -->
         </div>

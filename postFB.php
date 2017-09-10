@@ -1,22 +1,23 @@
 <?php 
 session_start();
+require_once('config.php');
 $_SESSION['currentPage'] = "postFB";
-                    if(isset($_SESSION['role'])){
-                        if($_SESSION['role'] == "admin"){
-                        }
-                        elseif ($_SESSION['role'] == "moderator") {
-                        }
-                        elseif (($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")) {
-                           echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>"; 
-                        }
-                    }
-                    else{
-                        echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>"; 
-                    }
+if(isset($_SESSION['role'])){
+    if($_SESSION['role'] == "admin"){
+    }
+    elseif ($_SESSION['role'] == "moderator") {
+    }
+    elseif (($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")) {
+        echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>"; 
+    }
+}
+else{
+    echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>"; 
+}
 
 require('helper.php');
 find_next_record("isPosted");
@@ -30,7 +31,7 @@ find_next_record("isPosted");
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -47,9 +48,10 @@ find_next_record("isPosted");
     <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
     <link href="css/editor/external/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="css/editor/index.css" rel="stylesheet">
+    <script src="js/config.js"></script>
 
 
-    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>     <script src="js/notify.min.js"></script>
 
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -74,7 +76,7 @@ find_next_record("isPosted");
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span> </a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -171,7 +173,7 @@ find_next_record("isPosted");
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel" style="height:600px;">
+                            <div class="x_panel" style="height:500px;">
                                 <div class="x_title">
                                     <h2>Post the scan hits to Facebook</h2>
                                     <div class="clearfix"></div>
@@ -227,19 +229,22 @@ find_next_record("isPosted");
                                         <div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Summary                                            </label>
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                            <textarea class="resizable_textarea form-control" disabled = "disabled" style="width: 100%; overflow: hidden; word-wrap: break-word; resize: horizontal; height: 104px;" data-autosize-on="true">    <?php echo htmlentities($GLOBALS['result']['summary']);?> </textarea>
+                                            <textarea class="textarea form-control" disabled = "disabled" style="width: 100%; resize: none;" data-autosize-on="true">    <?php echo htmlentities($GLOBALS['result']['summary']);?> </textarea>
 											</div>
                                             
                                         </div>
                                         <div class="ln_solid"></div>
                                         <div class="form-group">
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                  <button type="submit" name= "discard" class="btn btn-danger">Discard</button>
-                                                <?php
-                                              
+                                                  <button type="submit" name= "discard" class="btn btn-warning">Save</button>
+                                                <?php                                             
                                                 if(EMPTY($_SESSION['page_id'])) 
-                                                {   $reload = "https://www.facebook.com/dialog/oauth?client_id=950411125007007&redirect_uri=http://localhost/techstore/gentelella-master/production/post.php?fbTrue=true&scope=publish_pages,publish_actions,manage_pages";
-                                                    echo "<a class= 'btn btn-warning' href='".$reload."'>Login with Facebook</a>";
+                                                
+                                                {   
+                                                    $helper = $GLOBALS['facebook']->getRedirectLoginHelper();
+                                                    $permissions = ["publish_pages","publish_actions","manage_pages"]; // optional
+                                                    $loginUrl = $helper->getLoginUrl(SERVER_URL."post.php", $permissions);
+                                                    echo "<a class= 'btn btn-warning' href='".$loginUrl."'>Login with Facebook</a>";
                                                 }
                                                 if(isset($_SESSION['page_id'])) {
                                                     echo '<button type="submit" name= "post" class="btn btn-success">Post to Facebook</button>';
@@ -254,18 +259,6 @@ find_next_record("isPosted");
                         </div>
                     </div>
                 </div>
-
-                <!-- footer content -->
-                <footer>
-                    <div class="">
-                        <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                        <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-                        </p>
-                    </div>
-                    <div class="clearfix"></div>
-                </footer>
-                <!-- /footer content -->
-
             </div>
             <!-- /page content -->
         </div>

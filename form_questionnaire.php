@@ -1,28 +1,29 @@
 <?php 
 session_start();
+require_once('config.php');
 $_SESSION['currentPage'] = "form_questionnaire";
 require('helper.php');
 $questionnaireName = array();
-                    if(isset($_SESSION['role'])){
-                        if(($_SESSION['role'] == "admin")||($_SESSION['role'] == "moderator")){
-                             $collection_ques = $db->questionnaire;
-                             $cursor_ques = $collection_ques->find();
-                            foreach($cursor_ques as $document){
-                             $questionnaireName[]= $document['name'];
-                            }
-                        }
-                        elseif(($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")){
-                             echo "<script>
-                             window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                             </script>";
-                        } 
-                    }
-                     else{
-                         echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>";    
-                        }
-                   ?>
+if(isset($_SESSION['role'])){
+    if(($_SESSION['role'] == "admin")||($_SESSION['role'] == "moderator")){
+            $collection_ques = $db->questionnaire;
+            $cursor_ques = $collection_ques->find();
+        foreach($cursor_ques as $document){
+            $questionnaireName[]= $document['name'];
+        }
+    }
+    elseif(($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")){
+            echo "<script>
+            window.location.href='".SERVER_URL."logout.php';
+            </script>";
+    } 
+}
+    else{
+        echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>";    
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +35,7 @@ $questionnaireName = array();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -50,7 +51,9 @@ $questionnaireName = array();
     <!-- editor -->
     <link href="css/editor/external/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="css/editor/index.css" rel="stylesheet">
-    <script src="js/jquery.min.js"></script>    
+    <script src="js/jquery.min.js"></script>     <script src="js/notify.min.js"></script>    
+    <script src="js/config.js"></script>
+
     <style type="text/css">
         .form_wizard .stepContainer {
     display: block;
@@ -78,7 +81,7 @@ $questionnaireName = array();
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span> </a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -177,8 +180,9 @@ $questionnaireName = array();
                                 <div class="x_title">
                                     <h2>Questionnaire - &nbsp; </h2> <select class="questionselect col-md-3 col-sm-3 col-xs-12" id="ques_select" style="width:100px; height:25px;"><option id="selected" value="select">Select</option><?php foreach($questionnaireName as $ques){
                                                  echo"<option value='".$ques."''>".$ques."</option>";
-                                                } ?>;</select> &nbsp;&nbsp;&nbsp;<small>Carefully assess and answer your views on any/all of the news items </small>
+                                                } ?>;<br/></select> 
                                     <div class="clearfix"></div>
+                                    <div><small>Carefully assess and answer your views on any/all of the news items </small></div>
                                 </div>
                                 
                                 <div class="x_content">
@@ -194,7 +198,7 @@ $questionnaireName = array();
                                             <p id="tech-1-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-1-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -225,7 +229,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -429,7 +433,7 @@ $questionnaireName = array();
                                             <p id="tech-2-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-2-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -460,7 +464,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -662,7 +666,7 @@ $questionnaireName = array();
                                             <p id="tech-3-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-3-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -693,7 +697,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -895,7 +899,7 @@ $questionnaireName = array();
                                             <p id="tech-4-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-4-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -926,7 +930,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -1127,7 +1131,7 @@ $questionnaireName = array();
                                             <p id="tech-5-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-5-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -1158,7 +1162,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -1359,7 +1363,7 @@ $questionnaireName = array();
                                             <p id="tech-6-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-6-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -1390,7 +1394,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -1591,7 +1595,7 @@ $questionnaireName = array();
                                             <p id="tech-7-desc">  </p>
                                             <br/>
                                             <p id="tech-7-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -1622,7 +1626,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -1823,7 +1827,7 @@ $questionnaireName = array();
                                             <p id="tech-8-desc">  </p>
                                             <br/>
                                             <p id="tech-8-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -1854,7 +1858,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -2056,7 +2060,7 @@ $questionnaireName = array();
                                             <p id="tech-9-desc">  </p>
                                             <br/>
                                             <p id="tech-9-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -2087,7 +2091,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -2288,7 +2292,7 @@ $questionnaireName = array();
                                             <p id="tech-10-desc">  </p>
                                             <br/>
                                             <p id="tech-10-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -2319,7 +2323,7 @@ $questionnaireName = array();
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -2521,17 +2525,7 @@ $questionnaireName = array();
                         </div>
                     </div>
                     </div>
-                <!-- footer content -->
-            <footer>
-                <div class="">
-                    <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                     <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-                    </p>
                 </div>
-                <div class="clearfix"></div>
-            </footer>
-            <!-- /footer content -->
-            </div>
             <!-- /page content -->
         </div>
     </div>
@@ -2562,13 +2556,12 @@ $questionnaireName = array();
     <script type="text/javascript">
         
     $("#ques_select").change(function() {
-
         $("#selected").remove();        
         document.getElementById("abar").style.display = "block";
         var req = new XMLHttpRequest();
         $.ajax({
                 type: 'GET',
-                url: 'http://localhost/techstore/gentelella-master/production/techdataselect.php',
+                url: SERVER_URL+"techdataselect.php",
                 dataType: "json",
                 data: {currentQues:$(this).val() },
                 async: true,
@@ -2579,12 +2572,9 @@ $questionnaireName = array();
                 }
                
             });
-    });
-           $(document).ready(function () {
-            
-            // Smart Wizard     
+         });
+           $(document).ready(function () { 
             $('#wizard').smartWizard();
-
         });
 
         

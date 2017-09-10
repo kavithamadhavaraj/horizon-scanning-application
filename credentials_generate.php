@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php session_start(); 
+require_once('config.php');
 $_SESSION['currentPage'] = "credentials_generate";
-                    if(isset($_SESSION['role'])){
-                        if(($_SESSION['role'] == "admin")){
-                        
-                        }
-                        elseif (($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")||($_SESSION['role'] == "moderator")){
-                           echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>"; 
-                        }
-                    }
-                     else{
-                         echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>";    
-                        }
-                   ?>
+if(isset($_SESSION['role'])){
+    if (($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")||($_SESSION['role'] == "moderator")){
+        echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>"; 
+    }
+}
+else{
+    echo "<script>
+window.location.href='".SERVER_URL."logout.php';
+</script>";    
+}
+?>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -25,7 +23,7 @@ $_SESSION['currentPage'] = "credentials_generate";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -73,7 +71,7 @@ $_SESSION['currentPage'] = "credentials_generate";
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span></a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -160,23 +158,13 @@ $_SESSION['currentPage'] = "credentials_generate";
                             <h3>Generate Credentials</h3>
                         </div>
 
-                        <div class="title_right">
-                            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search for...">
-                                    <span class="input-group-btn">
-                            			<button class="btn btn-default" type="button">Go!</button>
-                        			</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="clearfix"></div>
 
                     <div class="row">
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel" style="height:600px;">
+                            <div class="x_panel" style="height:500px;">
                                 <div class="x_title">
                                     <h2>Generate User credentials for questionnaire</h2>
                                     <div class="clearfix"></div>
@@ -186,7 +174,7 @@ $_SESSION['currentPage'] = "credentials_generate";
 								<section class="generate_cred">
 								<form name="cred_generate_form">
 								<div>
-								<input type="text" class="form-control" name="EMail" placeholder="E-mail Id"  required="required" style="width:400px; margin:auto; position: relative; top: 40px;"/>
+								<input type="text" id="email" class="form-control" name="EMail" placeholder="E-mail Id"  required="required" style="width:400px; margin:auto; position: relative; top: 40px;"/>
 								</div> <br/>
 								<div style="text-align: center; position: relative; top: 50px;">
 								<button class="btn btn-success" type="button" onclick="form_validate()"> Generate </button>
@@ -227,26 +215,15 @@ $_SESSION['currentPage'] = "credentials_generate";
                         </div>
                     </div>
                 </div>
-
-                <!-- footer content -->
-                <footer>
-                    <div class="">
-                        <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                        <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-                        </p>
-                    </div>
-                    <div class="clearfix"></div>
-                </footer>
-                <!-- /footer content -->
-
             </div>
             <!-- /page content -->
         </div>
 
     </div>
 
-      
+    <script src="js/config.js"></script>
     <script src="js/jquery.min.js"></script>
+    <script src="js/notify.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/cred_generate.js"></script>
     <script src="js/icheck/icheck.min.js"></script>

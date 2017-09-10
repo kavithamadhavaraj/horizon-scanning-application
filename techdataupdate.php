@@ -1,33 +1,31 @@
 <?php
 	session_start();
-	echo json_encode("hello");
+	require_once('config.php');
 	if(isset($_POST['data1'])){
 	$output = json_decode($_POST['data1'],true);
-	$m = new MongoClient();
+    $m = new MongoDB\Client("mongodb://".MONGO_SERVER.":".MONGO_PORT);
 	$db = $m->techstore;
 	$collection = $db->user_response;
+	$dcollection = $db->techdata;
 	$totalscore = array();
 	$nodeid = $output['node'];// $output['node'];
 	$scoremap = $output['score'];//$output['score'];
 	$titlemap = $output['title'];//$output['title'];
 	
-	$total = 0;
+	
 	$score = array();
 	
 	for ($x = 0; $x < sizeof($nodeid); $x++) {
-		for ($y = 0; $y < sizeof($scoremap); $y++) {
-			$total = $total + $scoremap[$x][$y];
-		}
-		array_push($totalscore, $total);
+		array_push($totalscore, array_sum($scoremap[$x]));
 	}
 
+	
+
 	for ($x = 0; $x < sizeof($nodeid); $x++) {
-		$cursor = $collection->find(array(('username') => $_SESSION["username"]));
-		if(($cursor->count())> 0){
+		if(($collection->count(array(('username') => $_SESSION["username"], "techId" => $nodeid[$x])))> 0){
 			echo json_encode("exist");
-			$collection->update(array("username"=>$_SESSION["username"]), 
-				array('$push'=>array("response" =>array(
-									"techId" => $nodeid[$x],
+			$collection->updateOne(array("username"=>$_SESSION["username"], "techId" => $nodeid[$x]), 
+				array('$set'=>array("response" =>[array(
 									"techtitle" => $titlemap[$x],
 									"scoreA" => $scoremap[$x][0],
 									"scoreB" => $scoremap[$x][1],
@@ -39,15 +37,19 @@
 													"political" => $scoremap[$x][6]
 												)],
 									"totalscore" => $totalscore[$x]
-								)
-								)));
+								)]
+			)));
 		}
 		else{
 			echo json_encode("nexist");
+			$mongoID = (new MongoDB\BSON\ObjectID($nodeid[$x]));		
+			$result = $dcollection->findOne(array("_id" => $mongoID));
+			$newdata = array('$set' => array("score" => $totalscore[$x] + $result["score"]));
+			$dcollection->updateOne(array("_id" =>  $mongoID), $newdata);
 			$document = array(  
 				"username" =>$_SESSION["username"] , 
-				"response" => [array(
-									"techId" => $nodeid[$x],
+				"techId" => $nodeid[$x],
+				"response" => [array(									
 									"techtitle" => $titlemap[$x],
 									"scoreA" => $scoremap[$x][0],
 									"scoreB" => $scoremap[$x][1],
@@ -61,8 +63,9 @@
 									"totalscore" => $totalscore[$x]
 								)]
 			);
-			$collection->insert($document);
+			$collection->insertOne($document);
 		}
+	 
 	}  
 	}	
 ?>

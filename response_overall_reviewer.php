@@ -1,23 +1,25 @@
 <?php 
-session_start(); 
+session_start();
 require("dashboarddata.php");
+require_once('config.php');
+
 $_SESSION['currentPage'] = "response_overall_reviewer";
-                  if(isset($_SESSION['role'])){
-                        if(($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")){
-                        
-                        }
-                        elseif(($_SESSION['role'] == "moderator")|| ($_SESSION['role'] == "admin")) {
-                        echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>"; 
-                        }
-                    }
-                     else{
-                         echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>";    
-                        }
-                   ?>
+if(isset($_SESSION['role'])){
+    if(($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")){
+    
+    }
+    elseif(($_SESSION['role'] == "moderator")|| ($_SESSION['role'] == "admin")) {
+    echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>"; 
+    }
+}
+    else{
+        echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>";    
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +29,7 @@ $_SESSION['currentPage'] = "response_overall_reviewer";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -39,20 +41,16 @@ $_SESSION['currentPage'] = "response_overall_reviewer";
     <!-- Custom styling plus plugins -->
     <link href="css/custom.css" rel="stylesheet">
    
+    <script src="js/config.js"></script>
 
     <script src="js/jquery.min.js"></script>
+    <script src="js/notify.min.js"></script>
     <script src="js/nprogress.js"></script>
     <script>
         NProgress.start();
 
 
     </script>
-    <style type="text/css">
-        footer {
-    position: relative;
-    top: 80px;
-
-    </style>
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
         <![endif]-->
@@ -77,7 +75,7 @@ $_SESSION['currentPage'] = "response_overall_reviewer";
                 <div class="left_col scroll-view">
 
                  <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span> </a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -162,201 +160,8 @@ $_SESSION['currentPage'] = "response_overall_reviewer";
                     </div>
                 <br />
 
-                <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="x_panel tile fixed_height_320">
-                            <div class="x_title">
-                                <h2>STEEP Rating</h2>
-                                
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="x_content">
-                                <h4>Rating across technologies</h4>
-                                <div class="widget_summary">
-                                    <div class="w_left w_25">
-                                        <span>Social</span>
-                                    </div>
-                                    <div class="w_center w_55">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-green" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (sizeof($social)/$total)*100;?>%;">
-                                                <span class="sr-only"><?php echo sizeof($social)/$total;?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="w_right w_20">
-                                        <span><?php echo sizeof($social)?></span>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                                <div class="widget_summary">
-                                    <div class="w_left w_25">
-                                        <span>Technology</span>
-                                    </div>
-                                    <div class="w_center w_55">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-green" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo (sizeof($technology)/$total)*100;?>%;">
-                                                <span class="sr-only"><?php echo sizeof($technology)/$total;?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="w_right w_20">
-                                        <span><?php echo sizeof($technology);?></span>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="widget_summary">
-                                    <div class="w_left w_25">
-                                        <span>Economic</span>
-                                    </div>
-                                    <div class="w_center w_55">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-green" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo (sizeof($economical)/$total)*100;?>%;">
-                                                <span class="sr-only"><?php echo sizeof($economical)/$total;?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="w_right w_20">
-                                        <span><?php echo sizeof($economical);?></span>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="widget_summary">
-                                    <div class="w_left w_25">
-                                        <span>Environment</span>
-                                    </div>
-                                    <div class="w_center w_55">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-green" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo (sizeof($environmental)/$total)*100;?>%;">
-                                                <span class="sr-only"><?php echo sizeof($environmental)/$total;?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="w_right w_20">
-                                        <span><?php echo sizeof($environmental);?></span>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="widget_summary">
-                                    <div class="w_left w_25">
-                                        <span>Politics</span>
-                                    </div>
-                                    <div class="w_center w_55">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-green" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo (sizeof($political)/$total)*100;?>%;">
-                                                <span class="sr-only"><?php echo sizeof($political)/$total;?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="w_right w_20">
-                                        <span><?php echo sizeof($political);?></span>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="x_panel tile fixed_height_320 overflow_hidden">
-                            <div class="x_title">
-                                <h2>Top Technology</h2>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="x_content">
-
-                                <table class="" style="width:100%">
-                                    <tr>
-                                        <th style="width:37%;">
-                                            <p>STEEP Score</p>
-                                        </th>
-                                        <th>
-                                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                                                <p class="">    Category </p>
-                                            </div>
-                                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                                                <p class=""> Score</p>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <canvas id="canvas1" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
-                                        </td>
-                                        <td>
-                                            <table class="tile_info">
-                                                <tr>
-                                                    <td>
-                                                        <p><i class="fa fa-square blue"></i>Social</p>
-                                                    </td>
-                                                    <td><?php echo round($total_s); ?>%</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p><i class="fa fa-square green"></i>Technology</p>
-                                                    </td>
-                                                    <td><?php echo round($total_t); ?>%</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p><i class="fa fa-square purple"></i>Economic</p>
-                                                    </td>
-                                                    <td><?php echo round($total_ec); ?>%</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p><i class="fa fa-square aero"></i>Environment</p>
-                                                    </td>
-                                                    <td><?php echo round($total_e); ?>%</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <p><i class="fa fa-square red"></i>Politics</p>
-                                                    </td>
-                                                    <td><?php echo round($total_p); ?>%</td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="x_panel tile fixed_height_320">
-                            <div class="x_title">
-                                <h2>Score Status</h2>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="x_content">
-                                <div class="dashboard-widget-content">
-                                    <h4>Scored vs approved technologies</h4>
-                                        <canvas width="150" height="80" id="foo" class="" style="width: 260px; height: 150px;"></canvas>
-                                        <div class="goal-wrapper">
-                                            <span class="gauge-value pull-left"></span>
-                                            <span id="gauge-text" class="gauge-value pull-left"><?php echo $scoredtechnologies ?></span>
-                                            <span id="goal-text" class="goal-value pull-right"><?php echo $totalusefultechnologies;?></span>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-               
-                 <!-- footer content -->
-                <footer>
-                        <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                        <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-           
-                </footer>
-                <!-- /footer content -->
-            </div>
+             
+                  </div>
             <!-- /page content -->
 
         </div>

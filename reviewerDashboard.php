@@ -1,36 +1,36 @@
 <?php 
-session_start();
+require_once('config.php');
 require('helper.php');
-require('dashboarddata.php');
 $_SESSION['currentPage'] = "reviewerDashboard";
-                    if(isset($_SESSION['role'])){
-                       if(($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")){
-                            $collection_auth = $db->auth_user;
-                            $collection_ques = $db->questionnaire;
-                            $email = null;
-                            $questionnaireName = array();
-                            $cursor_auth = $collection_auth->find(array("username" => ($_SESSION['username']) ));
-                            foreach($cursor_auth as $document){
-                             $email= $document['E-mail'];
-                            }
-                            $cursor_ques = $collection_ques->find(array("userlist" => $email));
-                            foreach($cursor_ques as $document){
-                             $questionnaireName[]= $document['name'];
-                             $_SESSION['currentQuestionnaire'] = $document['_id'];
-                            }  
-                        } 
-                       else if ( ($_SESSION['role'] == "admin")||(!isset($_SESSION['currentQuestionnaire']))||($_SESSION['role'] == "moderator") ) { 
-                        echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>"; 
-                        } 
-                    } 
-                     else{
-                         echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>";    
-                        }
-                   ?>
+if(isset($_SESSION['role'])){
+    if(($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")){
+        $collection_auth = $db->auth_user;
+        $collection_ques = $db->questionnaire;
+        $email = null;
+        $questionnaireName = array();
+        $cursor_auth = $collection_auth->find(array("username" => ($_SESSION['username']) ));
+        foreach($cursor_auth as $document){
+            $email= $document['E-mail'];
+        }
+        $cursor_ques = $collection_ques->find(array("userlist" => $email));
+        foreach($cursor_ques as $document){
+            $questionnaireName[]= $document['name'];
+            $_SESSION['currentQuestionnaire'] = $document['_id'];
+        }  
+    } 
+    else if ( ($_SESSION['role'] == "admin")||(!isset($_SESSION['currentQuestionnaire']))||($_SESSION['role'] == "moderator") ) { 
+    echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>"; 
+    } 
+} 
+    else{
+        echo "<script>
+    window.location.href='".SERVER_URL."logout.php';
+    </script>";    
+    }
+require('dashboarddata.php');
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +42,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -68,7 +68,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
         }
     </style>
   
-    <script src="js/jquery.min.js"></script>    
+    <script src="js/jquery.min.js"></script>     <script src="js/notify.min.js"></script>    
 </head>
 
 
@@ -82,7 +82,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span> </a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -180,7 +180,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-1-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-1-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -211,7 +211,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -415,7 +415,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-2-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-2-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -446,7 +446,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -648,7 +648,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-3-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-3-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -679,7 +679,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -881,7 +881,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-4-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-4-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -912,7 +912,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -1113,7 +1113,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-5-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-5-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -1144,7 +1144,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -1345,7 +1345,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-6-desc"> &nbsp; &nbsp;  </p>
                                             <br/>
                                             <p id="tech-6-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -1376,7 +1376,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -1577,7 +1577,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-7-desc">  </p>
                                             <br/>
                                             <p id="tech-7-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -1608,7 +1608,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -1809,7 +1809,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-8-desc">  </p>
                                             <br/>
                                             <p id="tech-8-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -1840,7 +1840,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -2042,7 +2042,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-9-desc">  </p>
                                             <br/>
                                             <p id="tech-9-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -2073,7 +2073,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -2274,7 +2274,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                             <p id="tech-10-desc">  </p>
                                             <br/>
                                             <p id="tech-10-url" style="text-decoration: underline;"> </p> <br/>
-                                            <p> <strong> <h2> [A] How relevant is this technology to India? <h2> </strong> </p>
+                                            <p> <strong> <h2> [A] How relevant is this technology to UK? <h2> </strong> </p>
                                                 <div class="radio">
                                                     <small> Not relevant at all </small> 
                                                     <label class="">
@@ -2305,7 +2305,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                                                     <small> &nbsp; Absolutely relevant </small>
                                                 </div> <br/>
                                                 <p> <strong> <h2> B] If adopted, to how much of our population can it impact? </h2> </strong> </p> 
-                                                <h5> <p> We are asking in terms of percentage of India population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
+                                                <h5> <p> We are asking in terms of percentage of UK population, which can be taken as 130 Crore / 1.3 billion, projected in 2020 for this exercise. </p> </h5>
                                                 <div class="radio">
                                                     <label class="">
                                                         <div class="iradio_flat-green" style="position: relative;" >
@@ -2507,17 +2507,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                         </div>
                     </div>
                     </div>
-                <!-- footer content -->     <!-- footer content -->
-            <footer>
-                <div class="">
-                    <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                     <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-                    </p>
-                </div>
-                <div class="clearfix"></div>
-            </footer>
-            <!-- /footer content -->
-            </div>
+                  </div>
             <!-- /page content -->
         </div>
     </div>
@@ -2529,6 +2519,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
         <div class="clearfix"></div>
         <div id="notif-group" class="tabbed_notifications"></div>
     </div>
+    <script src="js/config.js"></script>
 
     <script src="js/bootstrap.min.js"></script>
     
@@ -2554,7 +2545,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
         var req = new XMLHttpRequest();
         $.ajax({
                 type: 'GET',
-                url: 'http://localhost/techstore/gentelella-master/production/techdataselect.php',
+                url: SERVER_URL+'techdataselect.php',
                 dataType: "json",
                 data: {currentQues:$(this).val() },
                 async: true,
@@ -2562,7 +2553,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                     console.log("dONE!");
                     console.log(output);
                     <?php 
-                            $dateTime = new DateTime('@'.(new MongoID($_SESSION['currentQuestionnaire']))->getTimestamp());
+                            $dateTime = new DateTime('@'.(new MongoDB\BSON\ObjectID($_SESSION['currentQuestionnaire']))->getTimestamp());
                             $date =  new DateTime();
                             $dbdate=  (array) $dateTime;
                             $nowdate = (array) $date;
@@ -2574,7 +2565,7 @@ $_SESSION['currentPage'] = "reviewerDashboard";
                             $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
                             if($days > 30){
                               echo "<script>
-                               window.location.href='http://localhost/techstore/gentelella-master/production/expired.php';
+                               window.location.href='".SERVER_URL."expired.php';
                              </script>"; 
                             }
                     ?>

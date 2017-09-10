@@ -1,29 +1,23 @@
-<?php 
-session_start();
-require('helper.php');
-// echo $_SESSION['username'];
-                    if(isset($_SESSION['role'])){
-                        if($_SESSION['role'] == "admin"){
-                        }
-                        elseif ($_SESSION['role'] == "moderator") {
-                        }
-                        elseif (($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")) {
-                        echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>"; 
-                        }
-                    }
-                    else{
-                        echo "<script>
-                        window.location.href='http://localhost/techstore/gentelella-master/production/logout.php';
-                        </script>"; 
-                    }
 
-$_SESSION['currentPage'] = "assign";
-find_next_record("name");
-?>
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+session_start();
+require_once('config.php');
+if(isset($_SESSION['role'])){
+    if($_SESSION['role'] == "admin" || $_SESSION['role'] == "moderator") {
+    }
+    elseif (($_SESSION['role'] == "reviewer")||($_SESSION['role'] == "Expert Reviewer")) {
+        echo "<script>window.location.href='".SERVER_URL."logout.php';</script>"; 
+    }
+}
+else{
+    echo "<script>window.location.href='".SERVER_URL."logout.php';</script>"; 
+}
+$_SESSION['currentPage'] = "assign";
+require('helper.php');
+#find_next_record("name");
+?>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -31,7 +25,7 @@ find_next_record("name");
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Techstore</title>
+    <title>Caan Associates</title>
 
     <!-- Bootstrap core CSS -->
 
@@ -48,13 +42,53 @@ find_next_record("name");
     <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
     <link href="css/editor/external/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="css/editor/index.css" rel="stylesheet">
-    <style>
-    #tags_value_addTag{
-        display: none;
-    }
-    </style>
-    <script src="js/jquery.min.js"></script>
-
+    <script src="js/config.js"></script>
+    <script src="js/jquery.min.js"></script>     
+    <script src="js/notify.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        var inputValue = $('#selection').val();
+        $.ajax({
+                type: 'POST',
+                url: 'helper.php',
+                data: 'selectionName='+inputValue,
+                cache: false,
+                success: function(result) {
+                if(result){
+                    result = JSON.parse(result);
+                    $('#selectedList').empty();
+                    result.forEach(function(element) {
+                    $('#selectedList').append($('<option>', { 
+                        value: element,
+                        text : element
+                    }));  
+                    }, this);
+                }
+                }
+        });
+        $('#selection').change(function(){
+            inputValue = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url: 'helper.php',
+                data: 'selectionName='+inputValue,
+                cache: false,
+                success: function(result) {
+                if(result){
+                    result = JSON.parse(result);
+                     $('#selectedList').empty();
+                    result.forEach(function(element) {
+                    $('#selectedList').append($('<option>', { 
+                        value: element,
+                        text : element
+                    }));  
+                    }, this);
+                }
+                }
+            });
+        });
+    });
+    </script>
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
         <![endif]-->
@@ -78,7 +112,7 @@ find_next_record("name");
                 <div class="left_col scroll-view">
 
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="glyphicon glyphicon-tag"></i> <span>Techstore</span></a>
+                        <a href="#" class="site_title"><span><img height="100%" width= "95%" src="./images/caan_logo.png"></span></a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -175,7 +209,7 @@ find_next_record("name");
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel" style="height:600px;">
+                            <div class="x_panel" style="height:500px;">
                                 <div class="x_title">
                                     <h2>Select questionnaire set and assign users</h2>
                                     <div class="clearfix"></div>
@@ -187,42 +221,47 @@ find_next_record("name");
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Questionnaire Set 
                                             </label>
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                            <select name= "selection" class="select2_single form-control" tabindex="-1">
-                                                    <?php
+                                            <select name= "selection" id="selection" class="select2_single form-control" tabindex="-1">
+                                                <?php
                                                     $collection = $db->questionnaire;
                                                     $cursor = $collection->find(array('name' =>  array('$exists' => true)));
                                                     foreach ($cursor as $document) {
-                                                    echo "<option value='".$document['name']."'>".$document['name']."</option>";
+                                                        echo "<option value='".$document['name']."'>".$document['name']."</option>";
                                                     }
                                                 ?>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">User list
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Complete User list
                                             </label>
-                                           	 <?php 
-                 							   $collection = $db->auth_user;
-                                                $cursor = $collection->find(array('role' =>  array('$nin' => array("admin","moderator"))));
-                                                $data= array();
-                                                foreach ($cursor as $document) {
-                                                    array_push($data, $document['E-mail']);
-                                                }
-                                                $result = implode(",",$data);
-                    						?>
+                                           	 
                                             <div  class="col-md-9 col-sm-9 col-xs-12">
-                                            <input  id="tags_value" name="userlist" type="text" class="tags form-control" value='<?php echo $result; ?>'> </input>
-                                           
-                                            </div>
-
-                                       
+                                            <select name= "user_selection[ ]" class="select2_single form-control" multiple="multiple" tabindex="-1">
+                                                <?php
+                                                    $collection = $db->auth_user;
+                                                    $cursor = $collection->find(array('role' =>  array('$nin' => array("admin","moderator"))));
+                                                    foreach ($cursor as $document) {
+                                                        echo "<option value='".$document['E-mail']."'>".$document['E-mail']."</option>";
+                                                    }
+                                                ?>
+                                            </select>
+                                            </div>                                       
                                         </div>
-                                        
+                                         <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Added User list
+                                            </label>
+                                           	 
+                                            <div  class="col-md-9 col-sm-9 col-xs-12">
+                                            <select id= "selectedList" disabled class="select2_single form-control" multiple="multiple" tabindex="-1">
+                            
+                                            </select>
+                                            </div>                                           
+                                        </div>                                     
                                        
                                         <div class="ln_solid"></div>
                                         <div class="form-group">
                                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                  <button type="reset" name= "discard" class="btn btn-danger">Reset</button>
                                                   <button type="submit" name= "assign" class="btn btn-success">Assign</button>                                                
                                             </div>
                                         </div>
@@ -232,18 +271,6 @@ find_next_record("name");
                         </div>
                     </div>
                 </div>
-
-                <!-- footer content -->
-                <footer>
-                    <div class="">
-                        <p class="pull-right">Techstore - a Horizon scanning application for Technology Information Assessment and Forecasting  |
-                        <span class="lead"> <i class="glyphicon glyphicon-tag"></i>Techstore</span>
-                        </p>
-                    </div>
-                    <div class="clearfix"></div>
-                </footer>
-                <!-- /footer content -->
-
             </div>
             <!-- /page content -->
         </div>
@@ -262,15 +289,7 @@ find_next_record("name");
      <!-- tags -->
     <script src="js/tags/jquery.tagsinput.min.js"></script>
     <script src="js/custom.js"></script>
-            <!-- input tags -->
-        <script>
-            $(function () {
-                $('#tags_value').tagsInput({
-                    width: 'auto'
-                });
-            });
-        </script>
-        <!-- /input tags -->
+  
 
 </body>
 
