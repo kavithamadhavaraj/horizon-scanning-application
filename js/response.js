@@ -17,26 +17,28 @@ var titleMap =[];
 //var titleMap = new Object();
 for(var j=0; j<obj_id_data.length; j++){
 	var temp =[];
+	var anyonefound = false;
 	for(var k = 0; k < 7; k++){
 		var tech = document.getElementsByName(arr[j][k]);
+		var found = false;
 		for (var i = 0; i < tech.length; i++) {
 			if (tech[i].checked) {
+				found= true;
+				anyonefound = true;
 				temp[k]= parseInt(tech[i].value);
 			}
-			else{
-				temp[k]= null;
-			}
+		}
+		if(!found){
+			temp[k]= null;
 		}
 	}
-	if(temp.length!= 0){
+	if(temp.length!= 0 && anyonefound){
 		nodeid.push(tech_nodeid[j]);
 		scoreMap.push(temp);
 		titleMap.push(title_data[j]);
-		//scoreMap[tech_nodeid[j]] = temp;
-		//titleMap[tech_nodeid[j]] = title_data[j];
 	}
 }
-console.log(scoreMap);
+console.log(scoreMap.toString());
 var userData = {node: nodeid , score: scoreMap, title: titleMap};
 var jsonString = JSON.stringify(userData);
 	
@@ -44,7 +46,7 @@ var test = userData['score'];
 var req = new XMLHttpRequest();
 $.ajax({
         type: "POST",
-        url: 'http://localhost/techstore/gentelella-master/production/techdataupdate.php',
+        url: SERVER_URL+"techdataupdate.php",
 		data: {data1 : jsonString},
 		dataType: "json",
 		async: true,

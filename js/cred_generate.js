@@ -6,7 +6,7 @@ function form_validate() {
 	emaildata = document.cred_generate_form.EMail.value
 	if( document.cred_generate_form.EMail.value == "" )
          {
-            alert( "Please provide your Email!" );
+			$("#email").notify('Please provide a email id to generate credentials!',{ className: 'warn', position:"top" });
             document.cred_generate_form.EMail.focus() ;
          }
 	else{
@@ -14,7 +14,7 @@ function form_validate() {
 
         if (reg.test(emaildata) == false) 
         {
-            alert('Invalid Email Address');
+            $("#email").notify('Invalid Email Address',{ className: 'error', position:"right" });
         } 
 		else{
 			generate_credentials();
@@ -47,19 +47,18 @@ var jsonString = JSON.stringify(array);
 $.ajax({
         type: "POST",
         async: false,
-        url: "http://localhost/techstore/gentelella-master/production/authdataupdate.php",
+        url: SERVER_URL+"authdataupdate.php",
         data: {action: jsonString}, 
-        cache: false,
         success: function(output){
            console.log(output);
-           			json = JSON.parse(output);
-					console.log(json["answer"]);
-					if(json.answer == "success")
-						alert("Credentials added successfully");
-					else
-						alert("Email / User ID already exists !");
+			json = JSON.parse(output);
+			console.log(json["answer"]);
+			if(json.answer == "success")
+				alert("Credentials added successfully");
+			else
+				alert("Email / User ID already exists !");
         }
     });
 	//alert("Document inserted successfully");
-	window.location = "http://localhost/techstore/gentelella-master/production/credentials_generate.php";
+	window.location = SERVER_URL+"credentials_generate.php";
 }
